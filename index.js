@@ -1,25 +1,32 @@
+require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.MessageContent
-    ],
-    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+    ]
 });
+const fs = require('fs');
+const config = require('./config.json');
 
-client.login('MTE2MjM1NTA0NTgyMDU0Mjk3Ng.G8fA1s.t9peVbqFqwLfqM3YdUYQKxRVPtjN2jodWp8NHE');
+client.login(process.env.DISCORD_BOT_TOKEN);
 
 client.once('ready', () => {
     console.log('Bot is online!');
+    console.log(`Logged in as ${client.user.tag}`);
+    console.log(`Servers: ${client.guilds.cache.size}`);
+    const reactionChannel = client.channels.cache.get(config.reactionMessage.channelId);
+    if (reactionChannel) {
+        reactionChannel.messages.fetch(config.reactionMessage.messageId).catch(error => {
+            console.error("Couldn't fetch the reaction message!", error);
+        });
+    }
 });
 
 client.on('messageCreate', async message => {
-    console.log(`Received message from ${message.author.tag}: ${message.content}`);
-    console.log(`Received message: ${message.content}`);
-    if (message.content === '!test') {
-        message.reply('Test successful!');
-    }    
     if (message.content === '!setupReactionRoles') {
         const reactionMessage = await message.channel.send("React to get a role!");
 
@@ -43,7 +50,7 @@ client.on('messageCreate', async message => {
             '🐍': '1162388242931404860',  // Python
             '🌙': '1162388269120639077',  // Lua
             '🐪': '1162388267967193158',  // Perl
-            '♯': '1162388247872286800'   // C#
+            '#️⃣': '1162388247872286800'   // C#
         };
 
         for (const emoji in emojis) {
@@ -84,7 +91,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
             '🐍': '1162388242931404860',  // Python
             '🌙': '1162388269120639077',  // Lua
             '🐪': '1162388267967193158',  // Perl
-            '♯': '1162388247872286800'   // C#
+            '#️⃣': '1162388247872286800'   // C#
     };
 
     if (emojis[reaction.emoji.name]) {
@@ -124,7 +131,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
             '🐍': '1162388242931404860',  // Python
             '🌙': '1162388269120639077',  // Lua
             '🐪': '1162388267967193158',  // Perl
-            '♯': '1162388247872286800'   // C#
+            '#️⃣': '1162388247872286800'   // C#
     };
 
     if (emojis[reaction.emoji.name]) {
