@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const emojis = {
     '<:swift:1162725530513190955>': '1162388253270360195',
     '<:go:1162727602184798208>': '1162388258756497409',
@@ -23,11 +25,23 @@ const emojis = {
 module.exports = {
     name: 'setupReactionRoles',
     description: 'Sets up reaction roles',
-    async execute(message) {
+    async execute(message, client) {
         const reactionMessage = await message.channel.send("React to get a role!");
 
         for (const emoji in emojis) {
             await reactionMessage.react(emoji);
         }
+
+        // Load the current config
+        const config = require('../config.json');
+
+        // Store the message ID and channel ID in the config
+        config.reactionMessage = {
+            messageId: reactionMessage.id,
+            channelId: reactionMessage.channel.id
+        };
+
+        // Write the updated config back to the file
+        fs.writeFileSync('./config.json', JSON.stringify(config, null, 4));
     }
 };

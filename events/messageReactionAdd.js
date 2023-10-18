@@ -36,8 +36,9 @@ module.exports = {
         const { message } = reaction;
         const member = message.guild.members.cache.get(user.id);
 
-        if (emojis[reaction.emoji.name]) {
-            member.roles.add(emojis[reaction.emoji.name]);
+        // Use reaction.emoji.toString() instead of reaction.emoji.name
+        if (emojis[reaction.emoji.toString()]) {
+            member.roles.add(emojis[reaction.emoji.toString()]);
         }
     }
 };
