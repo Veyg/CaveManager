@@ -26,7 +26,7 @@ module.exports = {
     name: 'setupReactionRoles',
     description: 'Sets up reaction roles',
     async execute(message, client) {
-        const reactionMessage = await message.channel.send("React to get a role!");
+        const reactionMessage = await message.channel.send("Choose your expertise! React to the corresponding emoji to get your role");
 
         for (const emoji in emojis) {
             await reactionMessage.react(emoji);

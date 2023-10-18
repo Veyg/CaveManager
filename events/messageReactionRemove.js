@@ -36,8 +36,8 @@ module.exports = {
         const { message } = reaction;
         const member = message.guild.members.cache.get(user.id);
 
-        if (emojis[reaction.emoji.name]) {
-            member.roles.remove(emojis[reaction.emoji.name]);
+        if (emojis[reaction.emoji.toString()]) {
+            member.roles.remove(emojis[reaction.emoji.toString()]);
         }
     }
 };
