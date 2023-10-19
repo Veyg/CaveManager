@@ -17,7 +17,7 @@ module.exports = {
                 // Create the new channel within the specified category
                 const newChannel = await newState.guild.channels.create({
                     name: newChannelName,
-                    type: 'GUILD_VOICE',
+                    type: 2,  // 2 represents GUILD_VOICE
                     parent: categoryID
                 });
 
