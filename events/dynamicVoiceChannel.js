@@ -1,47 +1,37 @@
-const placeholderChannelID = '1162388376981360751';
+const { Client, GatewayIntentBits } = require('discord.js');
 
 module.exports = {
     name: 'voiceStateUpdate',
     async execute(oldState, newState, client) {
-        console.log("Voice state update detected");
+        const placeholderChannelID = '1162388376981360751';
+        const categoryID = '1162397118011543713';
 
         // Check if the user joined the placeholder channel
         if (newState.channelId === placeholderChannelID) {
-            console.log("User joined the placeholder channel");
+            console.log('User joined the placeholder channel');
 
-            const user = newState.member.user;
-            const guild = newState.guild;
-
-            // Logging the user object for debugging purposes
-            console.log(user);
+            // Construct the new channel name
+            const newChannelName = `Coding with ${newState.member.displayName}`;
 
             try {
-                // Fetch channels to ensure they're cached
-                await guild.channels.fetch();
-
-                // Use a hardcoded string for the channel name
-                const channelName = "Hardcoded Name";
-                console.log("Constructed channel name:", channelName); // Log the constructed name
-
-                // Create the new voice channel
-                const newChannel = await guild.channels.create(channelName, {
-                    type: 'GUILD_VOICE'
+                // Create the new channel within the specified category
+                const newChannel = await newState.guild.channels.create({
+                    name: newChannelName,
+                    type: 'GUILD_VOICE',
+                    parent: categoryID
                 });
 
-                // Move the user to the new voice channel
+                // Move the member to the new channel
                 newState.setChannel(newChannel);
 
-                // Cleanup: Delete the channel when the last user leaves
-                newChannel.on('voiceStateUpdate', async (oldChannelState, newChannelState) => {
-                    if (newChannel.members.size === 0) {
-                        await newChannel.delete();
-                    }
-                });
-
             } catch (error) {
-                console.error("Error creating new voice channel:", error);
-                console.log(JSON.stringify(error, null, 2)); // Log the entire error object
+                console.error('Error creating new voice channel:', error);
             }
+        }
+
+        // Cleanup: If a dynamically created channel is empty, delete it
+        if (oldState.channel && oldState.channel.name.startsWith('Coding with') && oldState.channel.members.size === 0) {
+            oldState.channel.delete().catch(console.error);
         }
     }
 };
