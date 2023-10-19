@@ -1,17 +1,21 @@
-const { Client, GatewayIntentBits } = require('discord.js');
-
 module.exports = {
     name: 'voiceStateUpdate',
     async execute(oldState, newState, client) {
-        const placeholderChannelID = '1162388376981360751';
         const categoryID = '1162397118011543713';
 
-        // Check if the user joined the placeholder channel
-        if (newState.channelId === placeholderChannelID) {
-            console.log('User joined the placeholder channel');
+        // Mapping of placeholder channel IDs to name prefixes
+        const channelNameMapping = {
+            '1162388376981360751': '🎙️ General talks with',
+            '1162388383574802462': '🎵 Chillin and vibin with',
+            '1162388379493744801': '👥 Coding with'
+        };
 
-            // Construct the new channel name
-            const newChannelName = `Coding with ${newState.member.displayName}`;
+        // Check if the user joined one of the placeholder channels
+        if (channelNameMapping[newState.channelId]) {
+            console.log('User joined a placeholder channel');
+
+            // Construct the new channel name based on the placeholder channel they joined
+            const newChannelName = `${channelNameMapping[newState.channelId]} ${newState.member.displayName}`;
 
             try {
                 // Create the new channel within the specified category
@@ -30,7 +34,7 @@ module.exports = {
         }
 
         // Cleanup: If a dynamically created channel is empty, delete it
-        if (oldState.channel && oldState.channel.name.startsWith('Coding with') && oldState.channel.members.size === 0) {
+        if (oldState.channel && (oldState.channel.name.startsWith('🎙️ General talks with') || oldState.channel.name.startsWith('🎵 Chillin and vibin with') || oldState.channel.name.startsWith('👥 Coding with')) && oldState.channel.members.size === 0) {
             oldState.channel.delete().catch(console.error);
         }
     }
