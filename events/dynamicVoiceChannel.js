@@ -34,7 +34,7 @@ module.exports = {
         }
 
         // Cleanup: If a dynamically created channel is empty, delete it
-        if (oldState.channel && (oldState.channel.name.startsWith('🎙️ General talks with') || oldState.channel.name.startsWith('🎵 Chillin and vibin with') || oldState.channel.name.startsWith('👥 Coding with')) && oldState.channel.members.size === 0) {
+        if (oldState.channel && (oldState.channel.name.startsWith('🎙 General talks with') || oldState.channel.name.startsWith('🎵 Chillin and vibin with') || oldState.channel.name.startsWith('👥 Coding with')) && oldState.channel.members.size === 0) {
             oldState.channel.delete().catch(console.error);
         }
     }
