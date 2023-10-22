@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t Veyg/CaveManager .
+        run: docker build -t veyg/CaveManager .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Push Docker image to Docker Hub
-        run: docker push Veyg/CaveManager
+        run: docker push veyg/CaveManager
 
       - name: SSH and Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -35,13 +35,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           envs: BOT_TOKEN  # Passing the environment variable to the SSH session
           script: |
-            # Stop and remove all containers using the Veyg/CaveManager image
-            docker ps -a | awk '{ print $1,$2 }' | grep Veyg/CaveManager | awk '{print $1 }' | xargs -I {} docker stop {}
-            docker ps -a | awk '{ print $1,$2 }' | grep Veyg/CaveManager | awk '{print $1 }' | xargs -I {} docker rm {}
+            # Stop and remove all containers using the veyg/CaveManager image
+            docker ps -a | awk '{ print $1,$2 }' | grep veyg/CaveManager | awk '{print $1 }' | xargs -I {} docker stop {}
+            docker ps -a | awk '{ print $1,$2 }' | grep veyg/CaveManager | awk '{print $1 }' | xargs -I {} docker rm {}
 
             # Pull the latest image and run it
-            sudo docker pull Veyg/CaveManager
-            sudo docker run -d -e BOT_TOKEN=$BOT_TOKEN --name CaveManager Veyg/CaveManager
+            sudo docker pull veyg/CaveManager
+            sudo docker run -d -e BOT_TOKEN=$BOT_TOKEN --name CaveManager veyg/CaveManager
 
             # Clean up unused (dangling) images
             docker rmi $(docker images -f "dangling=true" -q)
