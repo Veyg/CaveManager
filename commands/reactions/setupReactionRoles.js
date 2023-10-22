@@ -33,7 +33,7 @@ module.exports = {
         }
 
         // Load the current config
-        const config = require('../config.json');
+        const config = require('../../config.json');
 
         // Store the message ID and channel ID in the config
         config.reactionMessage = {
