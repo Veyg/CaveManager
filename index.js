@@ -29,3 +29,4 @@ for (const file of eventFiles) {
 }
 
 client.login(process.env.DISCORD_BOT_TOKEN);
+console.log("Token:", process.env.DISCORD_BOT_TOKEN);
