@@ -21,33 +21,34 @@ client.commands = new Map();
 function loadCommands(dir) {
     console.log(`Accessing directory for commands: ${dir}`);
     const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'));
+    const subDirectories = fs.readdirSync(dir).filter(file => fs.statSync(`${dir}/${file}`).isDirectory());
 
     for (const file of commandFiles) {
         const filePath = `${dir}/${file}`;
-        if (fs.statSync(filePath).isDirectory()) {
-            loadCommands(filePath);
-        } else {
-            console.log(`Attempting to load command from: ${filePath}`);
-            const command = require(`./${filePath}`);
-            client.commands.set(command.name, command);
-        }
+        console.log(`Attempting to load command from: ${filePath}`);
+        const command = require(`./${filePath}`);
+        client.commands.set(command.name, command);
+    }
+
+    for (const subDir of subDirectories) {
+        loadCommands(`${dir}/${subDir}`);
     }
 }
 
-// Recursively load events from the events directory and its subdirectories
 function loadEvents(dir) {
     console.log(`Accessing directory for events: ${dir}`);
     const eventFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'));
+    const subDirectories = fs.readdirSync(dir).filter(file => fs.statSync(`${dir}/${file}`).isDirectory());
 
     for (const file of eventFiles) {
         const filePath = `${dir}/${file}`;
-        if (fs.statSync(filePath).isDirectory()) {
-            loadEvents(filePath);
-        } else {
-            console.log(`Attempting to load event from: ${filePath}`);
-            const event = require(`./${filePath}`);
-            client.on(event.name, (...args) => event.execute(...args, client));
-        }
+        console.log(`Attempting to load event from: ${filePath}`);
+        const event = require(`./${filePath}`);
+        client.on(event.name, (...args) => event.execute(...args, client));
+    }
+
+    for (const subDir of subDirectories) {
+        loadEvents(`${dir}/${subDir}`);
     }
 }
 
