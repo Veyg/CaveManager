@@ -42,6 +42,9 @@ jobs:
             # Pull the latest image and run it
             sudo docker pull veyg/cavemanager
             sudo docker run -d -e BOT_TOKEN=$BOT_TOKEN --name cavemanager veyg/cavemanager
-
             # Clean up unused (dangling) images
-            docker rmi $(docker images -f "dangling=true" -q)
+            DANGLING_IMAGES=$(docker images -f "dangling=true" -q)
+            if [ ! -z "$DANGLING_IMAGES" ]; then
+                docker rmi $DANGLING_IMAGES
+            fi
+
