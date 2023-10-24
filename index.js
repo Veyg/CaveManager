@@ -1,6 +1,9 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
+const sequelize = require('./database.js');
+const User = require('./models/User.js');
+const ShopItem = require('./models/ShopItem.js');
 
 const client = new Client({
     intents: [
@@ -55,6 +58,10 @@ function loadEvents(dir) {
 loadCommands('./commands');
 loadEvents('./events');
 
-client.login(process.env.DISCORD_BOT_TOKEN).catch(error => {
-    console.error("Failed to login:", error);
+// Sync the database
+sequelize.sync().then(() => {
+    console.log("Database synced!");
+    return client.login(process.env.DISCORD_BOT_TOKEN);
+}).catch(error => {
+    console.error("Error syncing the database:", error);
 });
