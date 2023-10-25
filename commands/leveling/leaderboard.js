@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 const User = require('../../models/User.js');
 
 module.exports = {
@@ -16,11 +16,13 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle('🏆 XP Leaderboard')
             .setColor('#F8AA2A')
-            .setFooter(`Page ${page}`, message.guild.iconURL());
+            .setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
 
-        topUsers.forEach((user, index) => {
-            embed.addField(`#${index + 1} ${user.discordId}`, `Level: ${user.level} | XP: ${user.xp}`);
-        });
+        for (const [index, user] of topUsers.entries()) {
+            const member = await message.guild.members.fetch(user.discordId);
+            const displayName = member ? member.user.tag : user.discordId;
+            embed.addField(`#${index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
+        }
 
         const row = new MessageActionRow()
             .addComponents(
@@ -53,10 +55,12 @@ module.exports = {
             });
 
             embed.fields = [];
-            topUsers.forEach((user, index) => {
-                embed.addField(`#${(page - 1) * usersPerPage + index + 1} ${user.discordId}`, `Level: ${user.level} | XP: ${user.xp}`);
-            });
-            embed.setFooter(`Page ${page}`, message.guild.iconURL());
+            for (const [index, user] of topUsers.entries()) {
+                const member = await message.guild.members.fetch(user.discordId);
+                const displayName = member ? member.user.tag : user.discordId;
+                embed.addField(`#${(page - 1) * usersPerPage + index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
+            }
+            embed.setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
 
             await interaction.update({ embeds: [embed] });
         });
