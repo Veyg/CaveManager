@@ -1,6 +1,5 @@
-const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js'); 
 const User = require('../../models/User.js');
-
 module.exports = {
     name: 'leaderboard',
     description: 'Displays the top users based on XP.',

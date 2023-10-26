@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, Intents } = require('discord.js'); // Use Intents instead of GatewayIntentBits
 const fs = require('fs');
 const sequelize = require('./database.js');
 const User = require('./models/User.js');
@@ -7,12 +7,12 @@ const ShopItem = require('./models/ShopItem.js');
 
 const client = new Client({
     intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildMessageReactions,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildVoiceStates
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.MESSAGE_CONTENT,
+        Intents.FLAGS.GUILD_VOICE_STATES
     ]
 });
 
