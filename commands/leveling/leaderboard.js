@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 const User = require('../../models/User.js');
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
             limit: usersPerPage
         });
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('🏆 XP Leaderboard')
             .setColor('#F8AA2A')
             .setFooter(`Page ${page}`, message.guild.iconURL());
