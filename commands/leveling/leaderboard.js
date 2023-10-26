@@ -1,4 +1,4 @@
-const { Embeds, Components } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const User = require('../../models/User.js');
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
             limit: usersPerPage
         });
 
-        const embed = Embeds.create()
+        const embed = new MessageEmbed()
             .setTitle('🏆 XP Leaderboard')
             .setColor('#F8AA2A')
             .setFooter(`Page ${page}`, message.guild.iconURL());
@@ -24,13 +24,13 @@ module.exports = {
             embed.addField(`#${index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
         }
 
-        const row = Components.createActionRow()
+        const row = new MessageActionRow()
             .addComponents(
-                Components.createButton()
+                new MessageButton()
                     .setCustomId('previous')
                     .setLabel('Previous')
                     .setStyle('PRIMARY'),
-                Components.createButton()
+                new MessageButton()
                     .setCustomId('next')
                     .setLabel('Next')
                     .setStyle('PRIMARY')
