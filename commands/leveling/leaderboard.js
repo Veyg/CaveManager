@@ -1,4 +1,4 @@
-const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js'); // <-- Added necessary imports
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const User = require('../../models/User.js');
 
 module.exports = {
@@ -24,17 +24,17 @@ module.exports = {
             embed.addField(`#${index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
         }
 
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('previous')
-                    .setLabel('Previous')
-                    .setStyle('PRIMARY'),
-                new MessageButton()
-                    .setCustomId('next')
-                    .setLabel('Next')
-                    .setStyle('PRIMARY')
-            );
+        const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('previous')
+                .setLabel('Previous')
+                .setStyle('PRIMARY'),
+            new ButtonBuilder()
+                .setCustomId('next')
+                .setLabel('Next')
+                .setStyle('PRIMARY')
+        );    
 
         const leaderboardMessage = await message.channel.send({ embeds: [embed], components: [row] });
 
