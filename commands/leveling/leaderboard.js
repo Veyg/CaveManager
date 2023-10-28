@@ -29,11 +29,11 @@ module.exports = {
             new ButtonBuilder()
                 .setCustomId('previous')
                 .setLabel('Previous')
-                .setStyle('PRIMARY'),
+                .setStyle('Primary'),
             new ButtonBuilder()
                 .setCustomId('next')
                 .setLabel('Next')
-                .setStyle('PRIMARY')
+                .setStyle('Primary'),
         );    
 
         const leaderboardMessage = await message.channel.send({ embeds: [embed], components: [row] });
