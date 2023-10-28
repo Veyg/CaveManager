@@ -16,7 +16,7 @@ module.exports = {
         const embed = new EmbedBuilder()  // <-- Changed to EmbedBuilder
             .setTitle('🏆 XP Leaderboard')
             .setColor('#F8AA2A')
-            .setFooter(`Page ${page}`, message.guild.iconURL());
+            embed.setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
 
         for (const [index, user] of topUsers.entries()) {
             const member = await message.guild.members.fetch(user.discordId);
@@ -60,7 +60,7 @@ module.exports = {
                 const displayName = member ? member.user.tag : user.discordId;
                 embed.addField(`#${(page - 1) * usersPerPage + index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
             }
-            embed.setFooter(`Page ${page}`, message.guild.iconURL());
+            embed.setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
 
             await interaction.update({ embeds: [embed] });
         });
