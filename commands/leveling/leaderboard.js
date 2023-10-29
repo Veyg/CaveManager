@@ -13,10 +13,11 @@ module.exports = {
             limit: usersPerPage
         });
 
-        const embed = new EmbedBuilder()  // <-- Changed to EmbedBuilder
-            .setTitle('🏆 XP Leaderboard')
-            .setColor('#F8AA2A')
-            embed.setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
+        const embed = new EmbedBuilder()
+        .setTitle('🏆 XP Leaderboard')
+        .setColor('#F8AA2A')
+        .setFooter(`Page ${page}`, message.guild.iconURL());
+    
 
         for (const [index, user] of topUsers.entries()) {
             const member = await message.guild.members.fetch(user.discordId);
