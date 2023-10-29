@@ -55,19 +55,21 @@ module.exports = {
                 limit: usersPerPage
             });
         
-            // Create a new embed for each interaction
-            const newEmbed = new EmbedBuilder()
+            // Clone the original embed
+            const newEmbed = EmbedBuilder.from(embed)
                 .setTitle('🏆 XP Leaderboard')
                 .setColor('#F8AA2A')
                 .setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
         
+            newEmbed.fields = [];  // Clear the fields
+        
             for (const [index, user] of topUsers.entries()) {
                 const member = await message.guild.members.fetch(user.discordId);
                 const displayName = member ? member.user.tag : user.discordId;
-                newEmbed.addField(`#${(page - 1) * usersPerPage + index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
+                newEmbed.addFields({ name: `#${(page - 1) * usersPerPage + index + 1} ${displayName}`, value: `Level: ${user.level} | XP: ${user.xp}` });
             }
         
             await interaction.update({ embeds: [newEmbed] });
-        });
+        });        
     }
 };
