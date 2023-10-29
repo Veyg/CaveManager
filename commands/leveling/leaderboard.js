@@ -48,22 +48,26 @@ module.exports = {
             } else if (interaction.customId === 'next') {
                 page++;
             }
-
+        
             const topUsers = await User.findAll({
                 order: [['xp', 'DESC']],
                 offset: (page - 1) * usersPerPage,
                 limit: usersPerPage
             });
-
-            embed.fields = [];
+        
+            // Create a new embed for each interaction
+            const newEmbed = new EmbedBuilder()
+                .setTitle('🏆 XP Leaderboard')
+                .setColor('#F8AA2A')
+                .setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
+        
             for (const [index, user] of topUsers.entries()) {
                 const member = await message.guild.members.fetch(user.discordId);
                 const displayName = member ? member.user.tag : user.discordId;
-                embed.addField(`#${(page - 1) * usersPerPage + index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
+                newEmbed.addField(`#${(page - 1) * usersPerPage + index + 1} ${displayName}`, `Level: ${user.level} | XP: ${user.xp}`);
             }
-            embed.setFooter({ text: `Page ${page}`, iconURL: message.guild.iconURL() });
-
-            await interaction.update({ embeds: [embed] });
+        
+            await interaction.update({ embeds: [newEmbed] });
         });
     }
 };
